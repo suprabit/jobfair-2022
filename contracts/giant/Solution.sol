@@ -3,12 +3,20 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-contract Solution {
-    IERC721 public giant;
+interface IGiant is IERC721 {
+    function mint() external payable;
+
+    function tokenId() external view returns (uint8);
+
+    function maxTokenId() external view returns (uint8);
+}
+
+contract GiantAttacker {
+    IGiant public giant;
 
     constructor(address _giantAddress) {
-        giant = IERC721(_giantAddress);
+        giant = IGiant(_giantAddress);
     }
 
-    function run() external {}
+    function attack() external {}
 }

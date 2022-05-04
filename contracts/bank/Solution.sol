@@ -2,17 +2,17 @@
 pragma solidity ^0.8.0;
 
 interface IBank {
-    function deposit(uint256 amount) external;
+    function deposit() external payable;
 
     function withdraw(uint256 amount) external;
 }
 
-contract Solution {
+contract BankAttacker {
     IBank public bank;
 
     constructor(address _bank) {
         bank = IBank(_bank);
     }
 
-    function run() external {}
+    function attack() external {}
 }

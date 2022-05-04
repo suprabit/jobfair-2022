@@ -1,15 +1,22 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-interface ILender {}
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract Solution {
-    IERC721 public giant;
+interface ILender {
+    function deposit(uint256 amount) external;
 
-    constructor(address _giant) {
-        giant = IERC721(_giant);
+    function borrow(uint256 amount, bytes calldata data) external;
+}
+
+contract LenderAttacker {
+    ILender public lender;
+    IERC20 public token;
+
+    constructor(address _token, address _lender) {
+        token = IERC20(_token);
+        lender = ILender(_lender);
     }
 
-    function run() external {}
+    function attack() external {}
 }
