@@ -1,17 +1,14 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
-import { Contract } from "ethers";
 import { ethers } from "hardhat";
-import { Solution } from "../../typechain";
-import { Attacker } from "../../typechain/Attacker";
-import { Giant } from "../../typechain/Giant";
+import { Giant, GiantAttacker } from "../../typechain";
 
 describe("[Challenge] Receiver", function () {
   let deployer: SignerWithAddress;
   let user: SignerWithAddress;
 
   let giant: Giant;
-  let solution: Solution;
+  let giantAttacker: GiantAttacker;
 
   before(async function () {
     [deployer, user] = await ethers.getSigners();
@@ -19,18 +16,25 @@ describe("[Challenge] Receiver", function () {
     const GiantFactory = await ethers.getContractFactory("Giant");
     giant = await GiantFactory.deploy();
 
-    const solutionFactory = await ethers.getContractFactory(
-      "Solution",
+    const GiantAttackerFactory = await ethers.getContractFactory(
+      "GiantAttacker",
       deployer
     );
-    solution = await solutionFactory.deploy(giant.address);
+    giantAttacker = await GiantAttackerFactory.deploy(giant.address);
+    await giant.toggleWhitelist(giantAttacker.address);
+
+    await deployer.sendTransaction({
+      from: deployer.address,
+      to: giantAttacker.address,
+      value: ethers.utils.parseEther("0.3"),
+    });
   });
 
   it("Runs the solution", async function () {
-    await expect(solution.run()).to.not.be.reverted;
+    await expect(giantAttacker.attack()).to.not.be.reverted;
   });
 
   after(async function () {
-    expect(await giant.balanceOf(deployer.address)).to.equal(55);
+    expect(await giant.balanceOf(giantAttacker.address)).to.equal(55);
   });
 });
