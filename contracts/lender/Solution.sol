@@ -6,7 +6,12 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 interface ILender {
     function deposit(uint256 amount) external;
 
-    function borrow(uint256 amount, bytes calldata data) external;
+    function borrow(
+        uint256 amount,
+        address target,
+        address borrower,
+        bytes calldata data
+    ) external;
 }
 
 contract LenderAttacker {

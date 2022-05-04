@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "hardhat/console.sol";
 
 contract Lender {
     IERC20 public token;
@@ -15,12 +16,17 @@ contract Lender {
         token.transferFrom(msg.sender, address(this), amount);
     }
 
-    function borrow(uint256 amount, bytes calldata data) external {
+    function borrow(
+        uint256 amount,
+        address target,
+        address borrower,
+        bytes calldata data
+    ) external {
         uint256 balanceBefore = token.balanceOf(address(this));
         require(balanceBefore >= amount, "Insufficient balance");
 
-        token.transfer(msg.sender, amount);
-        (msg.sender).call(data);
+        token.transfer(borrower, amount);
+        target.call(data);
 
         uint256 balanceAfter = token.balanceOf(address(this));
         require(balanceBefore >= balanceAfter, "Tokens not paid back");
