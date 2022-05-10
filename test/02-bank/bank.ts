@@ -30,11 +30,13 @@ describe("[Challenge] Receiver", function () {
   });
 
   it("Runs the solution", async function () {
+    // Bank attacker should not be reverted
     await expect(bankAttacker.attack({ value: ethers.utils.parseEther("2") }))
       .to.not.be.reverted;
 
+    // Bank balance should be less than 1 after the attack
     const bankBalance = await provider.getBalance(bank.address);
-    await expect(
+    expect(
       Number(ethers.utils.formatEther(bankBalance))
     ).to.be.lessThanOrEqual(1);
   });
