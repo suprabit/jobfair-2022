@@ -42,4 +42,3 @@ The goal of this challenge is to attack the `Giant` contract by minting all of t
 
 # Valuable materials
 - [Ethernaut](https://ethernaut.openzeppelin.com/) - interactive Ethereum CTF style game
-- 
