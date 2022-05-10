@@ -19,6 +19,7 @@ describe("[Challenge] Receiver", function () {
   });
 
   it("Transfers 1 ETH to the contract", async function () {
+    // Receiver contract should be able to receive 1 ETH
     await expect(
       user.sendTransaction({
         to: receiver.address,

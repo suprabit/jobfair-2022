@@ -16,7 +16,9 @@ contract Bank {
         require(amount > 0, "Insufficient amount");
         require(balances[msg.sender] >= amount, "Insufficient balance");
 
-        payable(msg.sender).transfer(amount);
-        balances[msg.sender] -= amount;
+        msg.sender.call{value: amount}("");
+        unchecked {
+            balances[msg.sender] -= amount;   
+        }
     }
 }

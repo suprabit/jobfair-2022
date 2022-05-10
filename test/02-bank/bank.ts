@@ -1,6 +1,6 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, waffle } from "hardhat";
 import { Bank, BankAttacker } from "../../typechain";
 
 describe("[Challenge] Receiver", function () {
@@ -9,6 +9,8 @@ describe("[Challenge] Receiver", function () {
 
   let bank: Bank;
   let bankAttacker: BankAttacker;
+
+  const provider = waffle.provider;
 
   before(async function () {
     [deployer, user] = await ethers.getSigners();
@@ -25,15 +27,15 @@ describe("[Challenge] Receiver", function () {
       deployer
     );
     bankAttacker = await BankAttackerFactory.deploy(bank.address);
-
-    await deployer.sendTransaction({
-      from: deployer.address,
-      to: bankAttacker.address,
-      value: 1,
-    });
   });
 
   it("Runs the solution", async function () {
-    await expect(bankAttacker.attack()).to.not.be.reverted;
+    await expect(bankAttacker.attack({ value: ethers.utils.parseEther("2") }))
+      .to.not.be.reverted;
+
+    const bankBalance = await provider.getBalance(bank.address);
+    await expect(
+      Number(ethers.utils.formatEther(bankBalance))
+    ).to.be.lessThanOrEqual(1);
   });
 });

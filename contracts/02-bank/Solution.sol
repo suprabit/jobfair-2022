@@ -14,5 +14,6 @@ contract BankAttacker {
         bank = IBank(_bank);
     }
 
-    function attack() external {}
+    // Warning: attack should use more than 2 eth
+    function attack() external payable {}
 }
