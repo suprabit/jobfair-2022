@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Giant, GiantAttacker } from "../../typechain";
 
-describe("[Challenge] Receiver", function () {
+describe("[Challenge] Giant", function () {
   let deployer: SignerWithAddress;
   let user: SignerWithAddress;
 
