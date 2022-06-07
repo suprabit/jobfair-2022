@@ -28,6 +28,6 @@ contract Lender {
         target.call(data);
 
         uint256 balanceAfter = token.balanceOf(address(this));
-        require(balanceBefore >= balanceAfter, "Tokens not paid back");
+        require(balanceBefore <= balanceAfter, "Tokens not paid back");
     }
 }
